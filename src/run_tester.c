@@ -16,9 +16,11 @@ void run_tester(t_results **results, t_maps *maps) {
         pipe(fd_out);
         pipe(fd_err);
         char *args[] = {"cub3D", maps->path, NULL};
+        err_buffer[0] = '\0';
+        out_buffer[0] = '\0';
         printf("testing: %s\n", &maps->path[18]);
         pid = fork();
-         if (pid == 0) {
+        if (pid == 0) {
             dup2(fd_err[1], 2);
             dup2(fd_out[1], STDOUT_FILENO);
             close_fds(fd_err);
