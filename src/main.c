@@ -36,7 +36,7 @@ void run_tester(t_results **results, t_maps *maps){
         }
         close(fd_err[1]);
         close(fd_out[1]);
-        sleep(3);
+        sleep(2);
         kill(pid, SIGINT);
         read(fd_err[0], err_buffer, sizeof(err_buffer));
         read(fd_out[0], out_buffer, sizeof(out_buffer));
