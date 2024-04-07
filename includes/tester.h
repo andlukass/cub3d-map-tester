@@ -20,6 +20,7 @@ typedef struct s_maps {
 
 void add_result(t_results **results, char *err, char *out);
 void add_map(t_maps **maps, char *path);
+void run_tester(t_results **results, t_maps *maps);
 void change_dir(char *new_directory);
 int get_maps(t_maps **maps);
 
