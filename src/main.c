@@ -18,7 +18,5 @@ int main() {
     change_dir("../");
     // print_map(maps);
     run_tester(&results, maps);
-   
-
     return 0;
 }
