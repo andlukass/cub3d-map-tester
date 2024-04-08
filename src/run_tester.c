@@ -44,50 +44,55 @@ static int check_content(char *err, char *out) {
     return (have_content);
 }
 
-void run_tester(t_maps *maps) {
-    int status;
-    int index = 0;
-    int corrects = 0;
+static int check_opening(int have_content, char initial) {
+    if ((have_content && initial == '0') || (!have_content && initial == '1'))
+        return (1);
+    else
+        return (0);
+}
+
+static int execute_cub(char *path, int *status){
     int fd_err[2];
     int fd_out[2];
     char err_buffer[4096];
     char out_buffer[4096];
 
-    while (maps) {
-        pipe(fd_out);
-        pipe(fd_err);
-        char *args[] = { "valgrind",
+    pipe(fd_out);
+    pipe(fd_err);
+    char *args[] = { "valgrind",
                     "--leak-check=full",
                     "--error-exitcode=42",
                     "./cub3D",
-                    maps->path,
+                    path,
                     NULL };
-        memset(err_buffer, '\0', sizeof(err_buffer));
-        memset(out_buffer, '\0', sizeof(out_buffer));
-        printf("testing: %s\n", &maps->path[18]);
-        pid_t pid = fork();
-        if (pid == 0) {
-            dup2(fd_err[1], STDERR_FILENO);
-            dup2(fd_out[1], STDOUT_FILENO);
-            close_fds(fd_err);
-            close_fds(fd_out);
-            if (execvp("valgrind", args) == -1)
-                exit(printf("error opening your cub3D, check if this is the rigth path: '../cub3D'\n"));
-        }
-        close(fd_out[1]);
-        close(fd_err[1]);
-        sleep(2);
-        kill(pid, SIGINT);
-        waitpid(pid, &status, 0);
-        read(fd_err[0], err_buffer, sizeof(err_buffer));
-        read(fd_out[0], out_buffer, sizeof(out_buffer));
+    pid_t pid = fork();
+    if (pid == 0) {
+        dup2(fd_err[1], STDERR_FILENO);
+        dup2(fd_out[1], STDOUT_FILENO);
+        close_fds(fd_err);
+        close_fds(fd_out);
+        if (execvp("valgrind", args) == -1)
+            exit(printf("error opening your cub3D, check if this is the rigth path: '../cub3D'\n"));
+    }
+    close(fd_out[1]);
+    close(fd_err[1]);
+    sleep(2);
+    kill(pid, SIGINT);
+    waitpid(pid, status, 0);
+    read(fd_err[0], err_buffer, sizeof(err_buffer));
+    read(fd_out[0], out_buffer, sizeof(out_buffer));
+    return (check_content(err_buffer, out_buffer));
+}
 
-        int have_content = check_content(err_buffer, out_buffer);
-        int is_correct;
-        if ((have_content && maps->path[18] == '0') || (!have_content && maps->path[18] == '1'))
-            is_correct = 1;
-        else
-            is_correct = 0;
+void run_tester(t_maps *maps) {
+    int status;
+    int index = 0;
+    int corrects = 0;
+
+    while (maps) {
+        printf("testing: %s\n", &maps->path[18]);
+        int have_content = execute_cub(maps->path, &status);
+        int is_correct = check_opening(have_content, maps->path[18]);
         if (is_correct && status != 10752 && status != 6)
             corrects++;
         print_is_correct(is_correct);
