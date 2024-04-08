@@ -2,7 +2,6 @@ SRCS = src/main.c                     \
 		src/change_dir.c              \
 		src/add_map.c                 \
 		src/get_maps.c                \
-		src/add_result.c              \
 		src/run_tester.c              \
 
 NAME = tester

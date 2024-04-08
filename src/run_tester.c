@@ -44,7 +44,7 @@ static int check_content(char *err, char *out) {
     return (have_content);
 }
 
-void run_tester(t_results **results, t_maps *maps) {
+void run_tester(t_maps *maps) {
     int status;
     int index = 0;
     int corrects = 0;
