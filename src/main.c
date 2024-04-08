@@ -1,6 +1,6 @@
 #include "../includes/tester.h"
 
-void print_map(t_maps *maps) {
+static void print_map(t_maps *maps) {
     while (maps){
         printf("%s\n", maps->path);
         maps = maps->next;
