@@ -1,10 +1,5 @@
 #include "../includes/tester.h"
 
-static void close_fds(int fd[2]) {
-    close(fd[0]);
-    close(fd[1]);
-}
-
 static void print_valgrind(int status) {
     switch (status)
     {
@@ -42,13 +37,6 @@ static int check_content(char *err, char *out) {
         i++;
     }
     return (have_content);
-}
-
-static int check_opening(int have_content, char initial) {
-    if ((have_content && initial == '0') || (!have_content && initial == '1'))
-        return (1);
-    else
-        return (0);
 }
 
 static int execute_cub(char *path, int *status){
@@ -92,7 +80,9 @@ void run_tester(t_maps *maps) {
     while (maps) {
         printf("testing: %s\n", &maps->path[18]);
         int have_content = execute_cub(maps->path, &status);
-        int is_correct = check_opening(have_content, maps->path[18]);
+        int is_correct = 0;
+        if ((have_content && maps->path[18] == '0') || (!have_content && maps->path[18] == '1'))
+            is_correct = 1;
         if (is_correct && status != 10752 && status != 6)
             corrects++;
         print_is_correct(is_correct);

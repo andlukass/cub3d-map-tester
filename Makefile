@@ -3,6 +3,7 @@ SRCS = src/main.c                     \
 		src/add_map.c                 \
 		src/get_maps.c                \
 		src/run_tester.c              \
+		src/close_fds.c               \
 
 NAME = tester
 

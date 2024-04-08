@@ -13,9 +13,10 @@ typedef struct s_maps {
     struct s_maps *next;
 } t_maps;
 
+void close_fds(int fd[2]);
 void add_map(t_maps **maps, char *path);
-void run_tester(t_maps *maps);
 void change_dir(char *new_directory);
+void run_tester(t_maps *maps);
 int get_maps(t_maps **maps);
 
 #endif
