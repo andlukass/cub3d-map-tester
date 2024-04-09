@@ -6,7 +6,7 @@ static void print_valgrind(int status) {
     case 10752:
         printf("Valgrind ❌\n\n");
         break;
-    case 6:
+    case 139:
         printf("❌ SEG FAULT ❌\n\n");
         break;
     default:
@@ -85,7 +85,7 @@ void run_tester(t_maps *maps) {
         int is_correct = 0;
         if ((have_content && maps->path[18] == '0') || (!have_content && maps->path[18] == '1'))
             is_correct = 1;
-        if (is_correct && status != 10752 && status != 6)
+        if (is_correct && status != 10752 && status != 139)
             corrects++;
         print_is_correct(is_correct);
         print_valgrind(status);
