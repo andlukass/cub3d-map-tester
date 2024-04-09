@@ -30,7 +30,7 @@ static int check_content(char *err, char *out) {
     if (!out[0])
         have_content = 0;
     while (err[i]) {
-        if (i == 0 && err[i] != '=')
+        if (i == 0 && (err[i] != '=' && err[i] != '^'))
             return 1;
         if (i > 0 && err[i - 1] == '\n' && err[i] != '=')
             return 1;
@@ -45,6 +45,8 @@ static int execute_cub(char *path, int *status){
     char err_buffer[4096];
     char out_buffer[4096];
 
+    memset(err_buffer, 0, sizeof(err_buffer));
+    memset(out_buffer, 0, sizeof(out_buffer));
     pipe(fd_out);
     pipe(fd_err);
     char *args[] = { "valgrind",
